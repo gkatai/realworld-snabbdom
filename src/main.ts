@@ -1,3 +1,3 @@
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <div>Hello realworld-snabbdom...</div>
-`;
+import { mount } from "./lib";
+
+mount("container");
