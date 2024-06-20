@@ -4,6 +4,8 @@ import {
   propsModule,
   styleModule,
   eventListenersModule,
+  h,
+  VNode,
 } from "snabbdom";
 import { store } from "../store/store";
 import { view } from "./view";
@@ -23,14 +25,16 @@ export function mount(elementName: string) {
     eventListenersModule, // attaches event listeners
   ]);
 
-  let oldVnode = viewFunction(store.getState(), store.dispatch);
+  const content = getContent();
+
+  let oldVnode = viewFunction(store.getState(), store.dispatch, content);
   patch(container, oldVnode);
 
   store.subscribe(() => {
-    const newVnode = viewFunction(store.getState(), store.dispatch);
-    patch(oldVnode, newVnode);
-    oldVnode = newVnode;
+    render();
   });
+
+  addEventListener("hashchange", () => render());
 
   if (import.meta.hot) {
     import.meta.hot.accept("./view", (viewModule) => {
@@ -39,9 +43,37 @@ export function mount(elementName: string) {
       }
 
       viewFunction = viewModule.view;
-      const newVnode = viewFunction(store.getState(), store.dispatch);
+      const newVnode = viewFunction(store.getState(), store.dispatch, content);
       patch(oldVnode, newVnode);
       oldVnode = newVnode;
     });
   }
+
+  function render() {
+    const content = getContent();
+
+    const newVnode = viewFunction(store.getState(), store.dispatch, content);
+    patch(oldVnode, newVnode);
+    oldVnode = newVnode;
+  }
+}
+
+function getContent(): VNode {
+  const routes = {
+    "": () => h("div", "Home Page"),
+    "#/login": () => h("div", "Login Page"),
+    "#/register": () => h("div", "Sign up Page"),
+  };
+
+  const hash = window.location.hash;
+
+  const routeEntries = Object.entries(routes);
+
+  for (const entry of routeEntries) {
+    if (hash === entry[0]) {
+      return entry[1]();
+    }
+  }
+
+  return h("div", "404");
 }

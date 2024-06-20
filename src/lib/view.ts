@@ -1,9 +1,13 @@
-import { h } from "snabbdom";
+import { VNode, h } from "snabbdom";
 import { RootState, AppDispatch } from "../store/store";
 import { increment } from "../features/counter-slice";
 import { navbarView } from "../features/navbar-view";
 
-export function view(state: RootState, dispatch: AppDispatch) {
+export function view(
+  state: RootState,
+  dispatch: AppDispatch,
+  content: VNode = h("div")
+) {
   return h("div", { on: { click: () => console.log("updated div clicked") } }, [
     h(
       "span",
@@ -12,5 +16,6 @@ export function view(state: RootState, dispatch: AppDispatch) {
     ),
     h("button", { on: { click: () => dispatch(increment()) } }, "+"),
     navbarView(),
+    content,
   ]);
 }
