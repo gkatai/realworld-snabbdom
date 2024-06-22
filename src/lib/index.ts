@@ -43,9 +43,7 @@ export function mount(elementName: string) {
       }
 
       viewFunction = viewModule.view;
-      const newVnode = viewFunction(store.getState(), store.dispatch, content);
-      patch(oldVnode, newVnode);
-      oldVnode = newVnode;
+      render();
     });
   }
 

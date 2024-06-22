@@ -1,6 +1,6 @@
-import { h } from "snabbdom";
+import { VNode, h } from "snabbdom";
 
-export function navbarView() {
+export function navbarView(): VNode {
   return h("nav.navbar.navbar-light", [
     h("div.container", [
       h("a.navbar-brand", { props: { href: "/" } }, "conduit"),

@@ -2,6 +2,7 @@ import { VNode, h } from "snabbdom";
 import { RootState, AppDispatch } from "../store/store";
 import { increment } from "../features/counter-slice";
 import { navbarView } from "../features/navbar-view";
+import { footerView } from "../features/footer-view";
 
 export function view(
   state: RootState,
@@ -17,5 +18,6 @@ export function view(
     h("button", { on: { click: () => dispatch(increment()) } }, "+"),
     navbarView(),
     content,
+    footerView(),
   ]);
 }
