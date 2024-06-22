@@ -9,6 +9,7 @@ import {
 } from "snabbdom";
 import { store } from "../store/store";
 import { view } from "./view";
+import { loginView } from "../features/authentication/login-view";
 
 export function mount(elementName: string) {
   let viewFunction = view;
@@ -59,7 +60,7 @@ export function mount(elementName: string) {
 function getContent(): VNode {
   const routes = {
     "": () => h("div", "Home Page"),
-    "#/login": () => h("div", "Login Page"),
+    "#/login": loginView,
     "#/register": () => h("div", "Sign up Page"),
   };
 
